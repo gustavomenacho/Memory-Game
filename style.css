@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000000;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'roboto', sans-serif;
+}
+
+.game-container {
+    min-width: 544px;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.stats {
+    color: #FFFFFF;
+    font-size: 16px;
+}
+
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    width: 100%;
+}
+
+.card {
+    aspect-ratio: 1;
+    background: #8234e0;
+    border: 2px solid #5a0caf;
+    border-radius: 12px;
+    background-image: url(./assets/lines.svg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+.revealed {
+    background-color: #ffffff;
+    border-color: #dadada;
+    cursor: not-allowed;
+}
+
+
+.card-emoji {
+    font-size: 40px;
+    line-height: 1;
+    opacity: 0;                
+    transition: opacity 0.3s;  
+}
+
+.revealed .card-emoji {
+    opacity: 1; 
+}
+
+.button {
+    width: 100%;
+    height: 52px;
+    background: #8234e9;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 16px;
+    border: 2px solid #5a0caf;
+    cursor: pointer;
+    font-family: 'roboto', sans-serif;
+    transition: background-color 0.3s;
+    margin-top: 32px;
+    border-radius: 12px;
+}
+
+.button:hover {
+    background-color: #7029d6;
+}
