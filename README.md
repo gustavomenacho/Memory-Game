@@ -40,7 +40,7 @@ Como é uma aplicação web estática, você pode executá-la facilmente:
 
 1.  Clone este repositório:
     ```bash
-    git clone (https://github.com/gustavomenacho/Memory-Game.git)
+    git clone https://github.com/gustavomenacho/Memory-Game.git
     ```
 2.  Acesse a pasta do projeto    
     ```
@@ -64,6 +64,6 @@ E pronto, o jogo será carregado e você já pode começar a jogar!
 
 Desenvolvido por **[Gustavo Menacho de Almeida]**.
 
--   **LinkedIn:** (https://linkedin.com/in/gustavomenacho)
--   **GitHub:** [@gustavomenacho](https://[github.com/gustavomenacho]
+-   **LinkedIn:** https://linkedin.com/in/gustavomenacho
+-   **GitHub:** @gustavomenacho https://github.com/gustavomenacho
 ---
