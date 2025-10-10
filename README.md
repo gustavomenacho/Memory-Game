@@ -42,8 +42,7 @@ Como é uma aplicação web estática, você pode executá-la facilmente:
     ```bash
     git clone (https://github.com/gustavomenacho/Memory-Game.git)
     ```
-2.  Acesse a pasta do projeto:
-    
+2.  Acesse a pasta do projeto    
     ```
 3.  Abra o arquivo `index.html` no seu navegador de preferência.
 
