@@ -2,6 +2,8 @@
 
 Minijogo oficial do [Smash Deck TCG](https://smashdecktcg.netlify.app), o jogo de cartas autoral com as lendas dos games. Encontre os pares de lendas no menor número de tentativas.
 
+**[Jogar agora](https://smashdecktcg-memoria.netlify.app)**
+
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
@@ -48,6 +50,8 @@ docs/              imagem deste README
 ```
 
 ## Como rodar
+
+O jogo está publicado no Netlify: [smashdecktcg-memoria.netlify.app](https://smashdecktcg-memoria.netlify.app). Para rodar no seu computador:
 
 1. Clone o repositório:
    ```bash
