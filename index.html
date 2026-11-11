@@ -1,33 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-    rel="stylesheet">
-
-  <link rel="icon" type="image/svg" href="./assets/logo.svg" />
-  <link rel="stylesheet" href="style.css">
-
-  <title>Memory</title>
+  <meta name="description" content="Jogo da memória com as lendas do Smash Deck TCG.">
+  <title>Jogo da Memória | Smash Deck TCG</title>
+  <link rel="icon" type="image/png" href="imagens/marca/favicon.png">
+  <link rel="stylesheet" href="css/estilo.css">
 </head>
+
 <body>
-  <main class="game-container">
-    <header class="game-header">
-      <img src="./assets/logo.svg" alt="logo do jogo" />
-      <span id="stats" class="stats">0 acertos de 0 tentativas</span>
+  <main class="jogo">
+    <header class="cabecalho">
+      <img class="logo" src="imagens/marca/logo-menu.webp" alt="Smash Deck TCG" width="60" height="56">
+      <h1 class="titulo">Jogo da Memória</h1>
+
+      <nav class="controles" aria-label="Opções da partida">
+        <div class="niveis" role="group" aria-label="Dificuldade">
+          <button class="botao botao-nivel" data-nivel="facil" aria-pressed="true">Fácil</button>
+          <button class="botao botao-nivel" data-nivel="medio" aria-pressed="false">Médio</button>
+          <button class="botao botao-nivel" data-nivel="dificil" aria-pressed="false">Difícil</button>
+        </div>
+        <button id="nova-partida" class="botao botao-principal">Nova partida</button>
+      </nav>
+
+      <p class="placar" aria-live="polite">
+        <span>Pares <strong id="pares">0/6</strong></span>
+        <span>Tentativas <strong id="tentativas">0</strong></span>
+        <span>Recorde <strong id="recorde">-</strong></span>
+      </p>
     </header>
 
-    <div id="deck" class="cards-grid"></div>
-    
-    <button id="restart" class="button">Reiniciar</button>
+    <section class="area-tabuleiro" aria-label="Cartas">
+      <div id="tabuleiro" class="tabuleiro" data-nivel="facil"></div>
+    </section>
   </main>
 
-  <script src="script.js"></script>
+  <dialog id="vitoria" class="vitoria" aria-labelledby="vitoria-titulo">
+    <img class="vitoria-logo" src="imagens/marca/logo-smash-deck.webp" alt="" width="120" height="120">
+    <h2 id="vitoria-titulo" class="vitoria-titulo">Vitória!</h2>
+    <p id="vitoria-texto" class="vitoria-texto"></p>
+    <p id="vitoria-recorde" class="vitoria-recorde"></p>
+    <p class="vitoria-frase">Todas as lendas voltaram ao Relicário.</p>
+    <button id="jogar-de-novo" class="botao botao-principal">Jogar de novo</button>
+  </dialog>
+
+  <script src="js/jogo.js"></script>
 </body>
 
 </html>

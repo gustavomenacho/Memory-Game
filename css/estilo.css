@@ -1,0 +1,531 @@
+/* Paleta, fontes e efeitos copiados do site do Smash Deck TCG */
+@font-face {
+    font-family: "Lora";
+    src: url("../fontes/Lora-Italic-Variable.woff") format("woff");
+    font-style: italic;
+    font-weight: 400 700;
+    font-display: swap;
+}
+
+:root {
+    --bg-abissal: #0a0e17;
+    --hud-glass: rgba(10, 14, 23, 0.75);
+    --text-light: #e0e0e0;
+    --text-suave: #8f9bb0;
+    --accent-gold: #f5cd03;
+    --font-principal: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+
+    /* Borda metálica das cartas */
+    --metal-shine: #bdbec0;
+    --metal-shadow: #494949;
+    --border-metal: linear-gradient(135deg,
+            var(--metal-shadow) 0%,
+            var(--metal-shine) 25%,
+            var(--metal-shine) 50%,
+            var(--metal-shine) 75%,
+            var(--metal-shadow) 100%);
+
+    /* Cores das classes (as mesmas do Códice) */
+    --soberano: 237, 184, 33;
+    --trevas: 219, 116, 39;
+    --sentinela: 83, 218, 248;
+    --combate: 118, 118, 118;
+    --crime: 101, 59, 33;
+    --caos: 138, 74, 168;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-principal);
+    color: var(--text-light);
+    background: radial-gradient(circle at 50% 50%, #0d111d 0%, #07090e 100%) fixed var(--bg-abissal);
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 3px;
+}
+
+/* A página inteira ocupa exatamente a altura da tela */
+.jogo {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Cabeçalho (mesmo vidro do menu do site) ---------- */
+.cabecalho {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px clamp(15px, 3vw, 40px);
+    background: var(--hud-glass);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+    display: block;
+    height: 50px;
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(245, 205, 3, 0.25));
+}
+
+.titulo {
+    margin: 0;
+    font-size: clamp(1.05rem, 2.2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    white-space: nowrap;
+}
+
+.placar {
+    display: flex;
+    gap: 6px 22px;
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-suave);
+}
+
+.placar strong {
+    margin-left: 4px;
+    font-size: 1rem;
+    color: #fff;
+}
+
+/* ---------- Botões (iguais aos .cta do site) ---------- */
+/* No computador os botões ficam no meio do cabeçalho */
+.controles {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px 24px;
+    margin: 0 auto;
+}
+
+.niveis {
+    display: flex;
+    gap: 10px;
+}
+
+.botao {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 11px 22px;
+    border-radius: 999px;
+    color: #fff;
+    background: transparent;
+    border: 1.5px solid var(--accent-gold);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.botao-principal {
+    color: #0a0e17;
+    background: var(--accent-gold);
+    box-shadow: 0 0 22px rgba(245, 205, 3, 0.55);
+}
+
+/* Só em aparelhos com mouse: no celular o hover "gruda" depois do toque */
+@media (hover: hover) {
+    .botao:hover {
+        background: rgba(245, 205, 3, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .botao-principal:hover {
+        background: var(--accent-gold);
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 0 34px rgba(245, 205, 3, 0.85);
+    }
+}
+
+/* Dificuldade escolhida: contorno aceso, para não competir com o botão principal */
+.botao-nivel[aria-pressed="true"] {
+    color: var(--accent-gold);
+    background: rgba(245, 205, 3, 0.16);
+    box-shadow: 0 0 16px rgba(245, 205, 3, 0.45);
+}
+
+.botao:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+/* ---------- Tabuleiro ----------
+   A área do tabuleiro é um "container": as unidades cqw e cqh valem 1% da
+   largura e da altura dela. Assim a carta é calculada pelo espaço que sobra
+   na tela e o jogo nunca precisa de rolagem. */
+.area-tabuleiro {
+    flex: 1;
+    min-height: 0;
+    margin: 10px clamp(16px, 3vw, 40px) 16px;
+    container-type: size;
+    display: grid;
+    place-items: center;
+}
+
+.tabuleiro {
+    --gap: clamp(6px, 1.4vmin, 16px);
+    /* largura da carta: o menor valor entre "cabe na largura" e "cabe na altura" (carta 5x7) */
+    --carta-w: min(calc((100cqw - (var(--colunas) - 1) * var(--gap)) / var(--colunas)),
+            calc((100cqh - (var(--linhas) - 1) * var(--gap)) / var(--linhas) * 5 / 7));
+    display: grid;
+    grid-template-columns: repeat(var(--colunas), var(--carta-w));
+    gap: var(--gap);
+}
+
+.tabuleiro[data-nivel="facil"] {
+    --colunas: 4;
+    --linhas: 3;
+}
+
+.tabuleiro[data-nivel="medio"] {
+    --colunas: 4;
+    --linhas: 4;
+}
+
+.tabuleiro[data-nivel="dificil"] {
+    --colunas: 6;
+    --linhas: 4;
+}
+
+/* Celular em pé: a grade gira para as cartas não ficarem minúsculas */
+@media (max-aspect-ratio: 4/5) {
+    .tabuleiro[data-nivel="facil"] {
+        --colunas: 3;
+        --linhas: 4;
+    }
+
+    .tabuleiro[data-nivel="dificil"] {
+        --colunas: 4;
+        --linhas: 6;
+    }
+}
+
+/* ---------- Carta ----------
+   .carta (botão, dá a perspectiva)
+     .carta-inclina (inclinação do mouse)
+       .carta-giro (virada com rotateY)
+         .face.verso e .face.frente */
+.carta {
+    width: 100%;
+    aspect-ratio: 5 / 7;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    perspective: 800px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.carta:focus-visible {
+    outline-offset: 4px;
+    border-radius: 10px;
+}
+
+.carta-inclina {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.4s ease;
+}
+
+/* Enquanto o mouse se mexe, a inclinação acompanha sem atraso */
+.carta.inclinando .carta-inclina {
+    transition: transform 0.08s ease-out;
+}
+
+.carta-giro {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.carta.virada .carta-giro {
+    transform: rotateY(180deg);
+}
+
+.face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    border: calc(var(--carta-w) * 0.035) solid transparent;
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Verso: degradê azul do site, logo e um filete dourado por dentro */
+.verso {
+    display: grid;
+    place-items: center;
+    background-image: radial-gradient(circle, #24305a, #0a0e1d), var(--border-metal);
+}
+
+.verso::before {
+    content: "";
+    position: absolute;
+    inset: 5%;
+    border: 1px solid rgba(245, 205, 3, 0.35);
+    border-radius: 6px;
+}
+
+.verso img {
+    width: 82%;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(245, 205, 3, 0.25));
+}
+
+/* Frente: arte da lenda e o nome numa faixa com a cor da classe */
+.frente {
+    transform: rotateY(180deg);
+    background-image: linear-gradient(var(--bg-abissal), var(--bg-abissal)), var(--border-metal);
+}
+
+/* A arte é horizontal e a carta é em pé. Cada lenda tem um --foco (o meio do
+   personagem, em % da largura da arte) e um --zoom (altura da arte na carta).
+   O translate leva o foco para o meio da carta. Quando o zoom é menor que 1,
+   a arte sobe um pouco para não ficar atrás da faixa do nome. */
+.frente .arte {
+    position: absolute;
+    top: calc(50% - (1 - var(--zoom)) * 15%);
+    left: 50%;
+    height: calc(100% * var(--zoom));
+    width: auto;
+    max-width: none;
+    transform: translate(calc(var(--foco) * -1), -50%);
+    /* bordas de cima e de baixo somem aos poucos no fundo desfocado */
+    -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(transparent, #000 10%, #000 90%, transparent);
+}
+
+/* Arte na altura toda: sem o esfumado, para não escurecer as bordas */
+.frente .arte.arte-cheia {
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
+/* A mesma arte, desfocada e escura, preenche o espaço em volta */
+.frente .arte-fundo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(6px) brightness(0.45);
+    transform: scale(1.15);
+}
+
+.carta-nome {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 22% 6% 5%;
+    background: linear-gradient(transparent, rgba(10, 14, 23, 0.95) 60%);
+    border-bottom: 3px solid rgb(var(--cor-classe));
+    color: #fff;
+    font-size: max(9px, calc(var(--carta-w) * 0.08));
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 1px 3px #000;
+}
+
+.classe-soberano { --cor-classe: var(--soberano); }
+.classe-trevas { --cor-classe: var(--trevas); }
+.classe-sentinela { --cor-classe: var(--sentinela); }
+.classe-combate { --cor-classe: var(--combate); }
+.classe-crime { --cor-classe: var(--crime); }
+.classe-caos { --cor-classe: var(--caos); }
+
+/* Par encontrado: brilho na cor da classe */
+.carta.encontrada {
+    cursor: default;
+}
+
+.carta.encontrada .frente {
+    box-shadow: 0 0 0 2px rgb(var(--cor-classe)), 0 0 18px rgba(var(--cor-classe), 0.75);
+}
+
+/* Brilho holográfico: um ponto de luz e um arco-íris que seguem o mouse.
+   --brilho-x e --brilho-y são atualizadas pelo jogo.js. */
+.brilho {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-image:
+        radial-gradient(circle at var(--brilho-x, 50%) var(--brilho-y, 50%), rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 45%),
+        repeating-linear-gradient(115deg,
+            rgba(255, 0, 128, 0.2) 0%,
+            rgba(245, 205, 3, 0.2) 8%,
+            rgba(0, 229, 255, 0.2) 16%,
+            rgba(140, 80, 255, 0.2) 24%,
+            rgba(255, 0, 128, 0.2) 32%);
+    background-size: 100% 100%, 300% 300%;
+    background-position: center, var(--brilho-x, 50%) var(--brilho-y, 50%);
+}
+
+@media (hover: hover) {
+    .carta:hover .brilho {
+        opacity: 1;
+    }
+
+    .carta:hover .face {
+        box-shadow: 10px 14px 28px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 205, 3, 0.25);
+    }
+}
+
+/* ---------- Janela de vitória ---------- */
+.vitoria {
+    width: min(90vw, 380px);
+    padding: 26px 24px 28px;
+    text-align: center;
+    color: var(--text-light);
+    background: rgba(10, 14, 23, 0.95);
+    border: 1px solid rgba(245, 205, 3, 0.35);
+    border-radius: 16px;
+    box-shadow: 0 0 40px rgba(245, 205, 3, 0.2), 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.vitoria::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+}
+
+.vitoria-logo {
+    width: 110px;
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(245, 205, 3, 0.4));
+}
+
+.vitoria-titulo {
+    margin: 6px 0 10px;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+}
+
+.vitoria-texto,
+.vitoria-recorde {
+    margin: 6px 0;
+}
+
+.vitoria-recorde {
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+
+.vitoria-frase {
+    margin: 16px 0 22px;
+    font-family: "Lora", Georgia, serif;
+    font-style: italic;
+    color: #c0c9d8;
+}
+
+/* ---------- Telas menores ---------- */
+/* Os botões descem para uma linha própria, abaixo do título e do placar */
+@media (max-width: 1280px) {
+    .cabecalho {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px 16px;
+    }
+
+    .controles {
+        order: 3;
+        flex-basis: 100%;
+        flex-wrap: wrap;
+        padding: 4px 0 6px;
+    }
+}
+
+@media (max-width: 700px) {
+    .cabecalho {
+        justify-content: center;
+        gap: 4px 12px;
+    }
+
+    .logo {
+        height: 38px;
+    }
+
+    .placar {
+        flex-basis: 100%;
+        justify-content: center;
+        margin: 0;
+        gap: 4px 16px;
+        font-size: 0.68rem;
+        letter-spacing: 1px;
+    }
+
+    .placar strong {
+        font-size: 0.9rem;
+    }
+
+    .controles {
+        gap: 8px;
+        padding-top: 10px;
+    }
+
+    .niveis {
+        gap: 8px;
+    }
+
+    .botao {
+        padding: 8px 16px;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .area-tabuleiro {
+        margin: 8px 12px 12px;
+    }
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
